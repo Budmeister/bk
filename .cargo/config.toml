@@ -1,0 +1,9 @@
+[build]
+target = "aarch64-unknown-none"
+
+[target.aarch64-unknown-none]
+linker = "aarch64-none-elf-ld"
+rustflags = [
+    "-C", "link-arg=-Tlinker.ld",
+    "-C", "link-arg=-Map=target/baremetal.map"
+]

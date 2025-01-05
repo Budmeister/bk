@@ -1,0 +1,15 @@
+[package]
+name = "bk"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[build-dependencies]
+cc = "1.0"
+
+[profile.release]
+panic = "abort"
+
+[features]
+default = []
