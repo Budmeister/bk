@@ -16,6 +16,7 @@ DISASSEMBLY_FILE := $(TARGET_DIR)/disassembled.txt
 CARGO := cargo
 OBJCOPY := rust-objcopy
 OBJDUMP := aarch64-none-elf-objdump
+GDB := aarch64-none-elf-gdb
 SIZE := aarch64-none-elf-size
 QEMU := qemu-system-aarch64
 
@@ -23,7 +24,8 @@ QEMU := qemu-system-aarch64
 CARGO_FLAGS := $(if $(filter $(BUILD_TYPE),release),--release,)
 OBJCOPY_FLAGS := --binary-architecture aarch64 -O binary
 OBJDUMP_FLAGS := -D
-QEMU_FLAGS := -M raspi4b -cpu cortex-a72 -nographic -kernel $(BIN_FILE) -s -S
+GDB_FLAGS := -ex "target remote :1234"
+QEMU_FLAGS := -M raspi4b -cpu cortex-a72 -nographic -kernel $(BIN_FILE) -s
 
 # Default target
 all: build
@@ -42,6 +44,13 @@ clean:
 # Run target
 run: build
 	$(QEMU) $(QEMU_FLAGS)
+
+# Run target
+run-debug: build
+	$(QEMU) $(QEMU_FLAGS) -S
+
+debug:
+	$(GDB) $(GDB_FLAGS) $(ELF_FILE)
 
 # Disassemble target
 disassemble: build
@@ -70,6 +79,9 @@ help:
 	@echo "  build      Build the project (default target)"
 	@echo "  clean      Clean build artifacts"
 	@echo "  run        Run the binary in QEMU (Raspberry Pi 4 model)"
+	@echo "  run-debug  Run the binary in QEMU but wait for gdb to connect"
+	@echo "  debug 		Connect to the debug process with gdb"
+	@echo "  disassemble	Disassemble the final elf"
 	@echo "  fmt        Format the codebase"
 	@echo "  lint       Lint the codebase with Clippy"
 	@echo "  test       Run tests"

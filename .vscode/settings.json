@@ -1,0 +1,6 @@
+{
+    "rust-analyzer.server.extraEnv": {
+        "CC": "aarch64-none-elf-gcc",
+        "AR": "aarch64-none-elf-ar"
+    }
+}
